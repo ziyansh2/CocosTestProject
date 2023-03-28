@@ -61,7 +61,6 @@ export class UIImageLabel extends Component {
 
                 let path = dir + str + '/spriteFrame';
                 let spriteFrame = resources.get(path, SpriteFrame);
-                console.log(spriteFrame);
 
                 const spriteNode = this.numberPool.alloc();
                 let sprite = spriteNode.getComponent(Sprite);
