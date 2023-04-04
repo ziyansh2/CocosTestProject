@@ -1,6 +1,11 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\assets",
+    "\\assets\\script",
+    "\\assets\\script\\actor",
+    "\\assets\\script\\events"
   ],
+  "SelectedNode": "\\assets\\script\\actor\\StateDefine.ts",
   "PreviewInSolutionExplorer": false
 }
