@@ -81,7 +81,10 @@
           {
             "frame": 0.26666666666666666,
             "func": "onFrameAttack",
-            "params": []
+            "params": [
+              "10"
+            ],
+            "x": 98.13333333333334
           }
         ],
         "speed": 1
