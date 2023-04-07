@@ -1,5 +1,6 @@
 import { _decorator, Component, Node, SkeletalAnimation, RigidBody, Collider, v3, CCFloat, Vec3 } from 'cc';
 import { MathUtil } from '../util/MathUtil';
+import { ActorProperty } from './ActorProperty';
 import { StateDefine } from './StateDefine';
 const { ccclass, property } = _decorator;
 
@@ -21,6 +22,7 @@ export class Actor extends Component {
     @property(CCFloat)
     angularSpeed: number = 10;
 
+    actorProperty: ActorProperty = null;
     input: Vec3 = v3();
 
     start() {

@@ -3,9 +3,7 @@
     "",
     "\\assets",
     "\\assets\\script",
-    "\\assets\\script\\actor",
-    "\\assets\\script\\events"
+    "\\assets\\script\\actor"
   ],
-  "SelectedNode": "\\assets\\script\\actor\\StateDefine.ts",
   "PreviewInSolutionExplorer": false
 }

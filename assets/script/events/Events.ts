@@ -2,7 +2,7 @@
 
 export enum Events {
     OnDie = 'onDie',
-
+    OnProjectileDead = 'onProjectileDead'
 }
 
 export class CustomEventData extends Event {
