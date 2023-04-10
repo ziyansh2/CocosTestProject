@@ -275,11 +275,11 @@
     "_center": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 0.15,
+      "y": 0.25,
       "z": 0
     },
     "_radius": 0.25,
-    "_cylinderHeight": 0.1,
+    "_cylinderHeight": 0.001,
     "_direction": 1,
     "_id": ""
   },
@@ -347,9 +347,7 @@
   },
   {
     "__type__": "cc.TargetOverrideInfo",
-    "source": {
-      "__id__": 18
-    },
+    "source": null,
     "sourceInfo": null,
     "propertyPath": [
       "skeletalAnimation"

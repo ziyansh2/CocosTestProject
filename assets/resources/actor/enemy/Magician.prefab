@@ -422,11 +422,11 @@
     "_center": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 0.175,
+      "y": 0.2,
       "z": 0
     },
     "_radius": 0.17,
-    "_cylinderHeight": 0.136,
+    "_cylinderHeight": 0.068,
     "_direction": 1,
     "_id": ""
   },

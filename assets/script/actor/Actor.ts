@@ -22,7 +22,7 @@ export class Actor extends Component {
     @property(CCFloat)
     angularSpeed: number = 10;
 
-    actorProperty: ActorProperty = null;
+    actorProperty: ActorProperty = new ActorProperty();
     input: Vec3 = v3();
 
     start() {

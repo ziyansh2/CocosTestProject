@@ -1,3 +1,3 @@
-﻿export class ActorManager {
+﻿export class EffectManager {
 
 }

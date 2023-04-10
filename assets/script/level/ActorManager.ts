@@ -2,12 +2,10 @@
 import { Actor } from "../actor/Actor";
 import { StateDefine } from "../actor/StateDefine";
 import { Events } from "../events/Events";
-import { ActorManager } from "./EffectManager";
 
-export class EffectManager {
+export class ActorManager {
 
-    static _instance: ActorManager;
-
+    private static _instance: ActorManager = null;
     static get instance(): ActorManager {
         if (this._instance == null) {
             this._instance = new ActorManager();
@@ -20,9 +18,12 @@ export class EffectManager {
     enemies: Array<Node> =[];
     enemyPool: Pool<Node> = null;
 
-    init(onComplete: () => void) {
-        resources.loadDir("actor/enemy", Prefab, (err: Error, prefabs: Prefab[]) => {
+    root: Node = null;
 
+    init(onComplete: () => void) {
+        this.root = director.getScene().getChildByName("EnemyRoot");
+
+        resources.loadDir("actor/enemy", Prefab, (err: Error, prefabs: Prefab[]) => {
             if (err) {
                 throw err;
             }
@@ -31,7 +32,8 @@ export class EffectManager {
                 (): Node => {
                     let prefab = prefabs[randomRangeInt(0, prefabs.length)];
                     let node = instantiate(prefab);
-                    director.getScene().addChild(node);
+                    this.root.addChild(node);
+                    node.active = false;
                     return node;
                 }, 10 * prefabs.length,
                 (node: Node) => {
@@ -39,6 +41,8 @@ export class EffectManager {
                 }
             )
         })
+
+        onComplete();
     }
 
     destory() {
@@ -51,6 +55,8 @@ export class EffectManager {
         node.active = true;
         this.enemies.push(node);
         node.on(Events.OnDie, this.onEnemyDie, this);
+
+        console.log(this.enemies.length);
 
         return node;
     }
