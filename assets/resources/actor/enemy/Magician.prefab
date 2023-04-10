@@ -502,11 +502,37 @@
     },
     "fileId": "e3H0kWA41GgJti1DAaIQdS",
     "instance": null,
-    "targetOverrides": null,
+    "targetOverrides": [
+      {
+        "__id__": 35
+      }
+    ],
     "nestedPrefabInstanceRoots": [
       {
         "__id__": 2
       }
+    ]
+  },
+  {
+    "__type__": "cc.TargetOverrideInfo",
+    "source": {
+      "__id__": 28
+    },
+    "sourceInfo": null,
+    "propertyPath": [
+      "skeletalAnimation"
+    ],
+    "target": {
+      "__id__": 2
+    },
+    "targetInfo": {
+      "__id__": 36
+    }
+  },
+  {
+    "__type__": "cc.TargetInfo",
+    "localID": [
+      "95BXM3uBtcup4Rkj3sIavD"
     ]
   }
 ]

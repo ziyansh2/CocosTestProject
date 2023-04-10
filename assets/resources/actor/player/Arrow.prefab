@@ -142,7 +142,7 @@
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
-      "z": 0
+      "z": -0.22
     }
   },
   {
@@ -193,7 +193,7 @@
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
-      "z": 0.11
+      "z": -0.12
     },
     "_size": {
       "__type__": "cc.Vec3",
@@ -219,12 +219,12 @@
       "__id__": 13
     },
     "_group": 8,
-    "_type": 1,
+    "_type": 4,
     "_mass": 1,
     "_allowSleep": true,
     "_linearDamping": 0.1,
     "_angularDamping": 0.1,
-    "_useGravity": true,
+    "_useGravity": false,
     "_linearFactor": {
       "__type__": "cc.Vec3",
       "x": 1,

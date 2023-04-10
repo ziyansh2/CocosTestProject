@@ -3,9 +3,8 @@
     "",
     "\\assets",
     "\\assets\\script",
-    "\\assets\\script\\events",
-    "\\assets\\script\\level",
-    "\\assets\\script\\util"
+    "\\assets\\script\\actor"
   ],
+  "SelectedNode": "\\assets\\script\\actor\\ActorProperty.ts",
   "PreviewInSolutionExplorer": false
 }

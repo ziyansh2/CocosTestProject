@@ -44,9 +44,6 @@ export class Level extends Component {
         let node = ActorManager.instance.createEnemy();
         node.worldPosition = spawnPoint;
 
-        console.log(node + " - " + spawnPoint);
-
-
         let actor = node.getComponent(Actor);
         actor.actorProperty.maxHp = this.baseHp;
         actor.actorProperty.hp = this.baseHp;

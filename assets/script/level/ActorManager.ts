@@ -56,8 +56,6 @@ export class ActorManager {
         this.enemies.push(node);
         node.on(Events.OnDie, this.onEnemyDie, this);
 
-        console.log(this.enemies.length);
-
         return node;
     }
 

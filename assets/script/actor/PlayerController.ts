@@ -1,5 +1,6 @@
-import { _decorator, Component, Node, math, Vec3, v3 } from 'cc';
+import { _decorator, Component, Node, math, Vec3, v3, randomRange } from 'cc';
 import { VirtualInput } from '../input/VirtualInput';
+import { ActorManager } from '../level/ActorManager';
 import { MathUtil } from '../util/MathUtil';
 import { Actor } from './Actor';
 import { ActorProperty } from './ActorProperty';
@@ -31,7 +32,16 @@ export class PlayerController extends Component {
         if (this.actor.input.length() > 0) {
             this.actor.changeState(StateDefine.Run);
         } else {
-            this.actor.changeState(StateDefine.Idle);
+            let enemy = this.getNearEnemy();
+            if (enemy == null) {
+                this.actor.changeState(StateDefine.Idle);
+            } else {
+                Vec3.subtract(this.actor.input, enemy.worldPosition, this.node.worldPosition);
+                this.actor.input.y = 0;
+                this.actor.input.normalize();
+
+                this.actor.changeState(StateDefine.Attack);
+            }
         }
     }
 
@@ -43,7 +53,18 @@ export class PlayerController extends Component {
             MathUtil.rotateAround(arrowForward, this.node.forward, Vec3.UP, this._splitAngle[i])
 
             let projectile = this.node.getComponent(ProjectileEmitter).create();
+            projectile.node.worldPosition = arrowStartPos;
             projectile.node.forward = arrowForward;
+
+            projectile.startTime = 0;
+            projectile.projectileProperty.penetration = this.actor.actorProperty.penetration;
+
+            const willchase = randomRange(0, 100) < this.actor.actorProperty.chaseRate;
+            if (willchase) {
+                projectile.target = ActorManager.instance.randomEnemy;
+            }
+
+            projectile.host = this.node;
         }
     }
 
@@ -62,6 +83,21 @@ export class PlayerController extends Component {
         if (isOdd) {
             this._splitAngle.push(0);
         }
+    }
+
+    getNearEnemy(): Node {
+        let minDistance = 9999;
+        let minNode: Node = null;
+
+        for (let enemy of ActorManager.instance.enemies) {
+            let distance = Vec3.distance(this.node.worldPosition, enemy.worldPosition);
+            if (distance < minDistance) {
+                minDistance = distance;
+                minNode = enemy;
+            }
+        }
+
+        return minNode;
     }
 
 }

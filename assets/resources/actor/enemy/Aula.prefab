@@ -337,6 +337,9 @@
     "targetOverrides": [
       {
         "__id__": 23
+      },
+      {
+        "__id__": 25
       }
     ],
     "nestedPrefabInstanceRoots": [
@@ -357,6 +360,28 @@
     },
     "targetInfo": {
       "__id__": 24
+    }
+  },
+  {
+    "__type__": "cc.TargetInfo",
+    "localID": [
+      "44l0IwuQhYKq9jk0oCwVFF"
+    ]
+  },
+  {
+    "__type__": "cc.TargetOverrideInfo",
+    "source": {
+      "__id__": 18
+    },
+    "sourceInfo": null,
+    "propertyPath": [
+      "skeletalAnimation"
+    ],
+    "target": {
+      "__id__": 2
+    },
+    "targetInfo": {
+      "__id__": 26
     }
   },
   {

@@ -1,6 +1,7 @@
-import { _decorator, Component, Node, SkeletalAnimation, RigidBody, Collider, v3, CCFloat, Vec3 } from 'cc';
+import { _decorator, Component, Node, SkeletalAnimation, RigidBody, Collider, v3, CCFloat, Vec3, ICollisionEvent, PhysicsSystem } from 'cc';
 import { MathUtil } from '../util/MathUtil';
 import { ActorProperty } from './ActorProperty';
+import { Projectile } from './Projectile';
 import { StateDefine } from './StateDefine';
 const { ccclass, property } = _decorator;
 
@@ -28,14 +29,16 @@ export class Actor extends Component {
     start() {
         this.rigidbody = this.node.getComponent(RigidBody);
         this.collider = this.node.getComponent(Collider);
+        this.collider.on('onTriggerEnter', this.onTriggerEnter, this);
     }
 
     update(deltaTime: number) {
+        this.doRotate();
+
         switch (this.currState) {
             case StateDefine.Run:
                 // rigidbody -> set velocity
                 // transform -> set position
-                this.doRotate();
                 this.doMove();
                 break;
         }
@@ -68,16 +71,16 @@ export class Actor extends Component {
     }
 
     changeState(destState: StateDefine) {
+        if (this.currState == StateDefine.Hit) {
+            if (destState == StateDefine.Die || destState == StateDefine.Hit)
+                return;
+        }
+
         if (this.currState == destState)
             return;
 
         if (this.currState == StateDefine.Die) 
             return;
-
-        if (this.currState == StateDefine.Hit) {
-            if (destState == StateDefine.Die || destState == StateDefine.Hit)
-                return;
-        }
 
         if (destState != StateDefine.Run) {
             this.stopMove();
@@ -93,9 +96,32 @@ export class Actor extends Component {
     updateState(destState: StateDefine, blendTime) {
         this.currState = destState;
         this.skeletalAnimation.crossFade(this.currState, blendTime);
-
         //No blend
         //this.skeletalAnimation.play(this.currState);
+    }
+
+    onTriggerEnter(event: ICollisionEvent) {
+        if (event.otherCollider.getGroup() == PhysicsSystem.PhysicsGroup.DEFAULT)
+            return;
+
+        const projectile = event.otherCollider.getComponent(Projectile);
+        const hostActor = projectile.host.getComponent(Actor);
+
+        let hurtDirection = v3();
+        Vec3.subtract(hurtDirection, this.node.worldPosition, projectile.node.worldPosition);
+        hurtDirection.normalize();
+        this.hurt(hostActor.actorProperty.attack, hurtDirection);
+    }
+
+    hurt(damage: number, hurtDirection: Vec3) {
+        this.actorProperty.hp -= damage;
+        if (this.actorProperty.hp <= 0)
+            this.changeState(StateDefine.Die);
+        else
+            this.changeState(StateDefine.Hit);
+
+        hurtDirection.multiplyScalar(2.0);
+        this.rigidbody.applyImpulse(hurtDirection);
     }
 
 }

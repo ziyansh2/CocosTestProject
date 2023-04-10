@@ -2,7 +2,7 @@ export class ActorProperty {
 
     projectileCount: number = 1;
 
-    peneration: number = 0;
+    penetration: number = 0;
 
     chaseRate: number = 0;
 
@@ -10,5 +10,6 @@ export class ActorProperty {
 
     hp: number = this.maxHp;
 
+    attack: number = 10;
 }
 
