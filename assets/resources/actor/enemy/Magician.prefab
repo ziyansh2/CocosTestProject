@@ -447,7 +447,7 @@
     },
     "skeletalAnimation": null,
     "linearSpeed": 1,
-    "angularSpeed": 10,
+    "angularSpeed": 50,
     "_id": ""
   },
   {
@@ -465,6 +465,12 @@
     "__prefab": {
       "__id__": 31
     },
+    "projectileStartNode": {
+      "__id__": 7
+    },
+    "attackRange": 3,
+    "attackInterval": 5,
+    "career": 1,
     "_id": ""
   },
   {
@@ -505,6 +511,9 @@
     "targetOverrides": [
       {
         "__id__": 35
+      },
+      {
+        "__id__": 37
       }
     ],
     "nestedPrefabInstanceRoots": [
@@ -533,6 +542,28 @@
     "__type__": "cc.TargetInfo",
     "localID": [
       "95BXM3uBtcup4Rkj3sIavD"
+    ]
+  },
+  {
+    "__type__": "cc.TargetOverrideInfo",
+    "source": {
+      "__id__": 30
+    },
+    "sourceInfo": null,
+    "propertyPath": [
+      "projectileStartNode"
+    ],
+    "target": {
+      "__id__": 2
+    },
+    "targetInfo": {
+      "__id__": 38
+    }
+  },
+  {
+    "__type__": "cc.TargetInfo",
+    "localID": [
+      "7fOcEhUMFMcre6PUN1aUgT"
     ]
   }
 ]

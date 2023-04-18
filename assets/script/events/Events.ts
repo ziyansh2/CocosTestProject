@@ -2,6 +2,10 @@
 
 export enum Events {
     OnDie = 'onDie',
+    OnHurt = 'onHurt',
+    OnKill = 'onKill',
+    OnPlayerUpgrade = 'onPlayerUpgrad',
+    OnExpGain = 'onExpGain',
     OnProjectileDead = 'onProjectileDead'
 }
 

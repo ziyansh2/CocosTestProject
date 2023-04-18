@@ -10,20 +10,26 @@ export class ProjectileEmitter extends Component {
     arrowPrefab: Prefab = null;
 
     pool: Pool<Node> = null;
+    root: Node = null;
 
     start() {
+        this.root = director.getScene().getChildByName("ProjectileRoot");
+
         this.pool = new Pool(
             () => {
-                return instantiate(this.arrowPrefab);
+                let node = instantiate(this.arrowPrefab);
+                node.active = false;
+                this.root.addChild(node);
+                return node;
             }, 5, (node: Node) => {
                 node.removeFromParent();
             }
         );
-
     }
 
     onDestroy() {
-        this.pool.destroy();
+        if(this.pool != null)
+            this.pool.destroy();
     }
 
     create(): Projectile {
@@ -40,6 +46,7 @@ export class ProjectileEmitter extends Component {
     }
 
     onProjectileDead(projectile: Projectile) {
+        projectile.host = null;
         projectile.node.active = false;
         this.pool.free(projectile.node);
     }

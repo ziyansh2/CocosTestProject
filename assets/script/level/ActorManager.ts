@@ -2,6 +2,8 @@
 import { Actor } from "../actor/Actor";
 import { StateDefine } from "../actor/StateDefine";
 import { Events } from "../events/Events";
+import { ResourceDefine } from "../resource/ResourceDefine";
+import { EffectManager } from "./EffectManager";
 
 export class ActorManager {
 
@@ -71,7 +73,7 @@ export class ActorManager {
                     node.active = false;
                 }
 
-                //TODO: die animation
+                EffectManager.instance.play(ResourceDefine.EffDie, node.worldPosition);
         })
     }
 

@@ -318,6 +318,10 @@
     "__prefab": {
       "__id__": 21
     },
+    "projectileStartNode": null,
+    "attackRange": 0.75,
+    "attackInterval": 5,
+    "career": 0,
     "_id": ""
   },
   {

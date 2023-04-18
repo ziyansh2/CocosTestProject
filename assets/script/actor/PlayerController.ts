@@ -1,6 +1,8 @@
-import { _decorator, Component, Node, math, Vec3, v3, randomRange } from 'cc';
+import { _decorator, Component, Node, math, Vec3, v3, randomRange, log, input } from 'cc';
+import { Events } from '../events/Events';
 import { VirtualInput } from '../input/VirtualInput';
 import { ActorManager } from '../level/ActorManager';
+import { AudioManager } from '../level/AudioManager';
 import { MathUtil } from '../util/MathUtil';
 import { Actor } from './Actor';
 import { ActorProperty } from './ActorProperty';
@@ -12,17 +14,24 @@ const { ccclass, property, requireComponent } = _decorator;
 @requireComponent(Actor)
 export class PlayerController extends Component {
 
-    actor: Actor = null;
-
     @property(Node)
     arrowString: Node = null;
 
+    actor: Actor = null;
+    projectileEmitter: ProjectileEmitter = null;
     private _splitAngle: number[] = [0];
 
     start() {
         this.actor = this.node.getComponent(Actor);
+        this.projectileEmitter = this.node.getComponent(ProjectileEmitter);
 
         this.node.on('onFrameAttackLoose', this.onFrameAttackLoose, this);
+        ActorManager.instance.playerActor = this.actor;
+        this.node.on(Events.OnKill, this.onKill, this);
+    }
+
+    onDestroy() {
+        ActorManager.instance.playerActor = null;
     }
 
     update(deltaTime: number) {
@@ -40,7 +49,7 @@ export class PlayerController extends Component {
                 this.actor.input.y = 0;
                 this.actor.input.normalize();
 
-                this.actor.changeState(StateDefine.Attack);
+                //this.actor.changeState(StateDefine.Attack);
             }
         }
     }
@@ -52,7 +61,7 @@ export class PlayerController extends Component {
         for (let i = 0; i < this.actor.actorProperty.projectileCount; i++) {
             MathUtil.rotateAround(arrowForward, this.node.forward, Vec3.UP, this._splitAngle[i])
 
-            let projectile = this.node.getComponent(ProjectileEmitter).create();
+            let projectile = this.projectileEmitter.create();
             projectile.node.worldPosition = arrowStartPos;
             projectile.node.forward = arrowForward;
 
@@ -66,6 +75,8 @@ export class PlayerController extends Component {
 
             projectile.host = this.node;
         }
+
+        AudioManager.instance.playShootSfx();
     }
 
     set projectileCount(count: number) {
@@ -97,7 +108,24 @@ export class PlayerController extends Component {
             }
         }
 
+        if (minDistance > 3)
+            return null;
+
         return minNode;
+    }
+
+    onKill() {
+        let property = this.actor.actorProperty;
+        property.exp += 10;
+        if (property.exp >= property.maxExp) {
+            property.maxExp *= 1.2;
+            property.exp = 0;
+            property.level++;
+
+            this.node.emit(Events.OnPlayerUpgrade, property.level);
+        }
+
+        this.node.emit(Events.OnExpGain, property.exp, property.maxExp);
     }
 
 }

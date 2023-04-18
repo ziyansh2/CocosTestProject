@@ -1,6 +1,8 @@
 import { _decorator, Component, Node, BoxCollider, Vec3, v3, macro, randomRange, RigidBody} from 'cc';
 import { Actor } from '../actor/Actor';
 import { ActorManager } from './ActorManager';
+import { AudioManager } from './AudioManager';
+import { EffectManager } from './EffectManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('Level')
@@ -16,17 +18,34 @@ export class Level extends Component {
     start() {
         //1. load resource
         ActorManager.instance.init(() => {
-            //2. logic of level (spawn enemies, paremeters)
-            this.schedule(() => {
-                for (let i = 0; i < this.count; i++) {
-                    this.randomSpawn();
-                }
-            }, 10, macro.REPEAT_FOREVER, 1.0);
+            EffectManager.instance.init(() => {
+                AudioManager.instance.init();
 
-            this.schedule(() => {
-                this.baseHp *= 1.2;
-            }, 20, macro.REPEAT_FOREVER, 1.0);
+                //2. logic of level (spawn enemies, paremeters)
+                this.schedule(() => {
+                    for (let i = 0; i < this.count; i++) {
+                        this.randomSpawn();
+                    }
+                }, 10, macro.REPEAT_FOREVER, 1.0);
+
+                this.schedule(() => {
+                    this.baseHp *= 1.2;
+                }, 20, macro.REPEAT_FOREVER, 1.0);
+                
+                this.startLevelTimer();
+            });
         });
+
+    }
+
+    onDestroy() {
+        ActorManager.instance.destory();
+        EffectManager.instance.destory();
+        AudioManager.instance.destroy();
+    }
+
+    startLevelTimer() {
+
     }
 
     randomSpawn() {

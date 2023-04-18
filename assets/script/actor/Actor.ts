@@ -1,4 +1,5 @@
-import { _decorator, Component, Node, SkeletalAnimation, RigidBody, Collider, v3, CCFloat, Vec3, ICollisionEvent, PhysicsSystem } from 'cc';
+import { _decorator, Component, Node, SkeletalAnimation, RigidBody, Collider, v3, CCFloat, Vec3, ICollisionEvent, PhysicsSystem, AnimationComponent } from 'cc';
+import { Events } from '../events/Events';
 import { MathUtil } from '../util/MathUtil';
 import { ActorProperty } from './ActorProperty';
 import { Projectile } from './Projectile';
@@ -30,7 +31,13 @@ export class Actor extends Component {
         this.rigidbody = this.node.getComponent(RigidBody);
         this.collider = this.node.getComponent(Collider);
         this.collider.on('onTriggerEnter', this.onTriggerEnter, this);
+        this.skeletalAnimation.getState(StateDefine.Hit).on(AnimationComponent.EventType.FINISHED, this.HitEnd, this);
     }
+
+    HitEnd() {
+        this.changeState(StateDefine.Idle);
+    }
+
 
     update(deltaTime: number) {
         this.doRotate();
@@ -71,12 +78,7 @@ export class Actor extends Component {
     }
 
     changeState(destState: StateDefine) {
-        if (this.currState == StateDefine.Hit) {
-            if (destState == StateDefine.Die || destState == StateDefine.Hit)
-                return;
-        }
-
-        if (this.currState == destState)
+        if (this.currState == destState && destState != StateDefine.Hit)
             return;
 
         if (this.currState == StateDefine.Die) 
@@ -105,23 +107,42 @@ export class Actor extends Component {
             return;
 
         const projectile = event.otherCollider.getComponent(Projectile);
+        if (projectile.host == null)
+            return;
+
         const hostActor = projectile.host.getComponent(Actor);
 
         let hurtDirection = v3();
         Vec3.subtract(hurtDirection, this.node.worldPosition, projectile.node.worldPosition);
         hurtDirection.normalize();
-        this.hurt(hostActor.actorProperty.attack, hurtDirection);
+
+        this.hurt(hostActor.actorProperty.attack, hurtDirection, projectile.host);
     }
 
-    hurt(damage: number, hurtDirection: Vec3) {
-        this.actorProperty.hp -= damage;
-        if (this.actorProperty.hp <= 0)
-            this.changeState(StateDefine.Die);
-        else
-            this.changeState(StateDefine.Hit);
+    hurt(damage: number, hurtDirection: Vec3, hurtSrc: Node) {
+        if (this.currState == StateDefine.Die) {
+            return;
+        }
 
+        this.actorProperty.hp -= damage;
+        this.node.emit(Events.OnHurt, this.actorProperty.hp / this.actorProperty.maxHp);
+        if (this.actorProperty.hp <= 0)
+        {
+            this.onDie();
+            hurtSrc.emit(Events.OnKill, this);
+        }
+        else
+        {
+            this.changeState(StateDefine.Hit);
+        }
+        
         hurtDirection.multiplyScalar(2.0);
         this.rigidbody.applyImpulse(hurtDirection);
+    }
+
+    onDie() {
+        this.changeState(StateDefine.Die);
+        this.node.emit(Events.OnDie, this.node);
     }
 
 }
