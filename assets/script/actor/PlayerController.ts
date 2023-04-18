@@ -49,7 +49,7 @@ export class PlayerController extends Component {
                 this.actor.input.y = 0;
                 this.actor.input.normalize();
 
-                //this.actor.changeState(StateDefine.Attack);
+                this.actor.changeState(StateDefine.Attack);
             }
         }
     }

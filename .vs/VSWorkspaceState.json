@@ -3,8 +3,12 @@
     "",
     "\\assets",
     "\\assets\\script",
-    "\\assets\\script\\actor"
+    "\\assets\\script\\actor",
+    "\\assets\\script\\camera",
+    "\\assets\\script\\level",
+    "\\assets\\script\\resource",
+    "\\assets\\script\\util"
   ],
-  "SelectedNode": "\\assets\\script\\actor\\PlayerController.ts",
+  "SelectedNode": "\\assets\\script\\actor\\ActorProperty.ts",
   "PreviewInSolutionExplorer": false
 }
